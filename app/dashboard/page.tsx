@@ -1,9 +1,14 @@
+import { buttonVariants } from "@/components/ui/button";
+import Link from "next/link";
+
 export default function Dashboard() {
   return (
-    <div className="py-6">
-      <h1 className="text-3xl font-bold tracking-tight mb-8">
-        Dashboard
-      </h1>
+    <div>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-medium">Your Blog Articles</h2>
+
+        <Link className={buttonVariants()} href={"/dashboard/create"}>Create Post</Link>
+      </div>
     </div>
   );
 }
