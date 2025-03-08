@@ -1,3 +1,4 @@
+import { CreatePost } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -21,17 +22,17 @@ export default function CreatePage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="flex flex-col gap-4">
+          <form className="flex flex-col gap-4" action={CreatePost}>
             <div className="flex flex-col gap-2">
               <Label>Title</Label>
-              <Input required type="text" placeholder="Title" />
+              <Input name="title" required type="text" placeholder="Title" />
             </div>
             <div className="flex flex-col gap-2">
               <Label>Content</Label>
-              <Textarea required placeholder="Content" />
+              <Textarea name="content" required placeholder="Content" />
               <div className="flex flex-col gap-2">
                 <Label>Image Url</Label>
-                <Input required type="url" placeholder="Image Url" />
+                <Input name="url" required type="url" placeholder="Image Url" />
               </div>
             </div>
 
