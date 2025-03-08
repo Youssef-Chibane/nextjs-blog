@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Button } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
+import {RegisterLink, LoginLink} from "@kinde-oss/kinde-auth-nextjs/components";
 
 export default function Navbar() {
   return (
@@ -27,8 +28,8 @@ export default function Navbar() {
       </div>
 
       <div className="flex items-center gap-4">
-        <Button>Login</Button>
-        <Button variant={"secondary"}>Sign Up</Button>
+        <LoginLink className={buttonVariants()}>Login</LoginLink>
+        <RegisterLink className={buttonVariants({variant: "secondary"})}>Sign up</RegisterLink>
       </div>
     </nav>
   );
