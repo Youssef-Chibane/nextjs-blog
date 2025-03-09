@@ -8,6 +8,10 @@ export async function CreatePost(formData: FormData) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
+  if (!user) {
+    return redirect("/api/auth/login");
+  }
+
   const data = await prisma.blogPost.create({
     data: {
       title: formData.get("title") as string,
