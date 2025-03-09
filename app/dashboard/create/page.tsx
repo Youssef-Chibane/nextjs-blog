@@ -1,5 +1,5 @@
 import { CreatePost } from "@/app/actions";
-import { Button } from "@/components/ui/button";
+import SubmitButton from "@/components/general/SubmitButton";
 import {
   Card,
   CardContent,
@@ -36,7 +36,7 @@ export default function CreatePage() {
               </div>
             </div>
 
-            <Button>Create Post</Button>
+            <SubmitButton />
           </form>
         </CardContent>
       </Card>
