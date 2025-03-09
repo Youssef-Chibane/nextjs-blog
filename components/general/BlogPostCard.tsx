@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { DeletePost } from "@/app/actions";
 
 interface IappProps {
   data: {
@@ -61,6 +62,19 @@ export default function BlogPostCard({ data }: IappProps) {
           </div>
         </div>
       </Link>
+
+      {/* Delete Post Button */}
+      <div className="p-4 border-t border-gray-200 bg-gray-50">
+        <form action={DeletePost}>
+          <input type="hidden" name="postId" value={data.id} />
+          <button
+            type="submit"
+            className="w-full bg-red-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-600 transition"
+          >
+            Delete Post
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
