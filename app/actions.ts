@@ -25,3 +25,12 @@ export async function CreatePost(formData: FormData) {
 
   return redirect("/dashboard");
 }
+
+export async function DeletePost(formData: FormData) {
+  const postId = formData.get("postId") as string;
+  await prisma.blogPost.delete({
+    where: { id: postId },
+  });
+
+  return redirect("/dashboard");
+}
