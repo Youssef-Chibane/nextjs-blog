@@ -2,6 +2,7 @@ import { DeletePost } from "@/app/actions";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { prisma } from "@/lib/prisma";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -11,6 +12,9 @@ interface PageProps {
 }
 
 export default async function PostPage({ params }: PageProps) {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
   const data = await prisma.blogPost.findUnique({
     where: {
       id: params.id,
@@ -20,6 +24,7 @@ export default async function PostPage({ params }: PageProps) {
   if (!data) {
     return notFound();
   }
+  const isOwner = user?.id === data.authorId; // Check if the logged-in user is the post owner
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
       <div className="flex justify-between items-center w-full">
@@ -29,20 +34,25 @@ export default async function PostPage({ params }: PageProps) {
         >
           Back to posts
         </Link>
-        <div className="flex space-x-2">
-          <Link href={"/edit"} className={buttonVariants()}>
-            Edit
-          </Link>
-          <form action={DeletePost}>
-            <input type="hidden" name="postId" value={params.id} />
-            <button
-              type="submit"
-              className={buttonVariants({ variant: "destructive" })}
+        {isOwner && (
+          <div className="flex space-x-2">
+            <Link
+              href={`/posts/${params.id}/edit`}
+              className={buttonVariants()}
             >
-              Delete
-            </button>
-          </form>
-        </div>
+              Edit
+            </Link>
+            <form action={DeletePost}>
+              <input type="hidden" name="postId" value={params.id} />
+              <button
+                type="submit"
+                className={buttonVariants({ variant: "destructive" })}
+              >
+                Delete
+              </button>
+            </form>
+          </div>
+        )}
       </div>
       <div className="mb-8 mt-6">
         <h1 className="text-3xl font-bold tracking-tight mb-4">{data.title}</h1>
