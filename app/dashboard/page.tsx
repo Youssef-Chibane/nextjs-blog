@@ -26,7 +26,9 @@ export default async function Dashboard() {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-medium">Your Blog Articles</h2>
+        <h1 className="py-6 text-3xl font-bold tracking-tight">
+          Your Blog Articles:
+        </h1>
 
         <Link className={buttonVariants()} href={"/dashboard/create"}>
           Create Post
