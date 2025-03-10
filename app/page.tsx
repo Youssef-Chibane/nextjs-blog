@@ -19,7 +19,7 @@ export default async function Home() {
       </h1>
       {count === 0 ? (
         <div className="flex items-center justify-center h-[50vh]">
-          <h1 className="text-3xl font-bold text-gray-600">
+          <h1 className="text-3xl font-bold text-gray-800">
             No recent posts available. Check back later for fresh content!
           </h1>
         </div>

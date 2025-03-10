@@ -16,7 +16,7 @@ export default async function PostsPage() {
       </h1>
       {count === 0 ? (
         <div className="flex items-center justify-center h-[50vh]">
-          <h1 className="text-3xl font-bold text-gray-600">
+          <h1 className="text-3xl font-bold text-gray-800">
             It looks empty here! Stay tuned for amazing content.
           </h1>
         </div>

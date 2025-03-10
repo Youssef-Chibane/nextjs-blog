@@ -4,25 +4,25 @@ import { prisma } from "@/lib/prisma";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import Link from "next/link";
 
-async function getData(userId: string) {
+export default async function Dashboard() {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
   const data = await prisma.blogPost.findMany({
     where: {
-      authorId: userId,
+      authorId: user.id,
     },
     orderBy: {
       createdAt: "desc",
     },
   });
 
-  return data;
-}
+  const count = await prisma.blogPost.count({
+    where: {
+      authorId: user.id,
+    },
+  });
 
-export default async function Dashboard() {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
-
-  const data = await getData(user.id);
-  const count = data.length;
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -37,7 +37,7 @@ export default async function Dashboard() {
       </div>
       {count === 0 ? (
         <div className="flex flex-col items-center justify-center h-[50vh]">
-          <h1 className="text-3xl font-bold text-gray-600 text-center mb-4">
+          <h1 className="text-3xl font-bold text-gray-800 text-center mb-4">
             No blog posts yet! Start your journey by creating the first one.
           </h1>
           <Link
