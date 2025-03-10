@@ -25,7 +25,7 @@ export default async function Dashboard() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between">
         <h1 className="py-6 text-3xl font-bold tracking-tight">
           Your Blog Articles:
         </h1>
