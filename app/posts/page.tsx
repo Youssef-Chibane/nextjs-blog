@@ -1,7 +1,22 @@
 import BlogPostCard from "@/components/general/BlogPostCard";
 import { prisma } from "@/lib/prisma";
+import loading from "../loading";
+import { Suspense } from "react";
 
 export default async function PostsPage() {
+  return (
+    <div>
+      <h1 className="py-6 text-3xl font-bold tracking-tight" id="latest-posts">
+        All Blog Articles:
+      </h1>
+      <Suspense fallback={loading()}>
+        <BlogPosts />
+      </Suspense>
+    </div>
+  );
+}
+
+async function BlogPosts() {
   const data = await prisma.blogPost.findMany({
     orderBy: {
       createdAt: "desc",
@@ -9,11 +24,9 @@ export default async function PostsPage() {
   });
 
   const count = await prisma.blogPost.count();
+
   return (
-    <div>
-      <h1 className="py-6 text-3xl font-bold tracking-tight" id="latest-posts">
-        All Blog Articles({count}):
-      </h1>
+    <>
       {count === 0 ? (
         <div className="flex items-center justify-center h-[50vh]">
           <h1 className="text-3xl font-bold text-gray-800">
@@ -29,6 +42,6 @@ export default async function PostsPage() {
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 }

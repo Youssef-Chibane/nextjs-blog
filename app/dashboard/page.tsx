@@ -3,8 +3,28 @@ import { buttonVariants } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import Link from "next/link";
+import { Suspense } from "react";
+import loading from "../loading";
 
-export default async function Dashboard() {
+export default function Dashboard() {
+  return (
+    <div>
+      <div className="flex items-center justify-between">
+        <h1 className="py-6 text-3xl font-bold tracking-tight">
+          Your Blog Articles:
+        </h1>
+        <Link className={buttonVariants()} href={"/dashboard/create"}>
+          Create Post
+        </Link>
+      </div>
+      <Suspense fallback={loading()}>
+        <BlogPosts />
+      </Suspense>
+    </div>
+  );
+}
+
+async function BlogPosts() {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
@@ -24,17 +44,7 @@ export default async function Dashboard() {
   });
 
   return (
-    <div>
-      <div className="flex items-center justify-between">
-        <h1 className="py-6 text-3xl font-bold tracking-tight">
-          Your Blog Articles:
-        </h1>
-        {count === 0 ? null : (
-          <Link className={buttonVariants()} href={"/dashboard/create"}>
-            Create Post
-          </Link>
-        )}
-      </div>
+    <>
       {count === 0 ? (
         <div className="flex flex-col items-center justify-center h-[50vh]">
           <h1 className="text-3xl font-bold text-gray-800 text-center mb-4">
@@ -56,6 +66,6 @@ export default async function Dashboard() {
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 }
