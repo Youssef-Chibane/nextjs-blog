@@ -1,3 +1,4 @@
+import { DeletePost } from "@/app/actions";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { prisma } from "@/lib/prisma";
@@ -32,12 +33,15 @@ export default async function PostPage({ params }: PageProps) {
           <Link href={"/edit"} className={buttonVariants()}>
             Edit
           </Link>
-          <Link
-            href={"/delete"}
-            className={buttonVariants({ variant: "destructive" })}
-          >
-            Delete
-          </Link>
+          <form action={DeletePost}>
+            <input type="hidden" name="postId" value={params.id} />
+            <button
+              type="submit"
+              className={buttonVariants({ variant: "destructive" })}
+            >
+              Delete
+            </button>
+          </form>
         </div>
       </div>
       <div className="mb-8 mt-6">
