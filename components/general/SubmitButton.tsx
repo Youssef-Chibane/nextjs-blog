@@ -8,7 +8,7 @@ export default function SubmitButton() {
 
   return (
     <Button className="w-fit" type="submit" disabled={pending}>
-      Submit
+      {pending ? "Submitting" : "Submit"}
     </Button>
   );
 }
