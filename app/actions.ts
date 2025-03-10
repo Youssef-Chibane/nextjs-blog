@@ -27,10 +27,32 @@ export async function CreatePost(formData: FormData) {
 }
 
 export async function DeletePost(formData: FormData) {
+  // Get the post ID from the form data
   const postId = formData.get("postId") as string;
+
+  // Get the current user's session
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  // Fetch the post to check if the user is the owner
+  const post = await prisma.blogPost.findUnique({
+    where: { id: postId },
+  });
+
+  if (!post) {
+    throw new Error("Post not found");
+  }
+
+  // Check if the logged-in user is the owner of the post
+  if (post.authorId !== user.id) {
+    throw new Error("You are not authorized to delete this post");
+  }
+
+  // Proceed with deletion if the user is the author
   await prisma.blogPost.delete({
     where: { id: postId },
   });
 
+  // Redirect after successful deletion
   return redirect("/dashboard");
 }
