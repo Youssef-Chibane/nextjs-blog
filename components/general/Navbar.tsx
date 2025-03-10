@@ -12,29 +12,35 @@ export default async function Navbar() {
   const user = await getUser();
 
   return (
-    <nav className="py-5 flex items-center justify-between">
-      <div className="flex items-center gap-6">
-        <Link href={"/"}>
-          <h1 className="text-3xl font-semibold">
-            Blog<span className="text-blue-500">Chibane</span>
-          </h1>
+    <nav className="relative py-5 flex items-center justify-between">
+      {/* Left side: Logo */}
+      <Link href={"/"}>
+        <h1 className="text-3xl font-semibold">Blog</h1>
+      </Link>
+
+      {/* Center: Links */}
+      <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-6">
+        <Link
+          href={"/"}
+          className="text-sm font-medium hover:text-blue-500 transition-colors"
+        >
+          Home
         </Link>
-        <div className="hidden sm:flex items-center gap-6">
-          <Link
-            href={"/"}
-            className="text-sm font-medium hover:text-blue-500 transition-colors"
-          >
-            Home
-          </Link>
-          <Link
-            href={"/dashboard"}
-            className="text-sm font-medium hover:text-blue-500 transition-colors"
-          >
-            Dashboard
-          </Link>
-        </div>
+        <Link
+          href={"/posts"}
+          className="text-sm font-medium hover:text-blue-500 transition-colors"
+        >
+          Posts
+        </Link>
+        <Link
+          href={"/dashboard"}
+          className="text-sm font-medium hover:text-blue-500 transition-colors"
+        >
+          Dashboard
+        </Link>
       </div>
 
+      {/* Right side: Auth Buttons */}
       {user ? (
         <div className="flex items-center gap-4">
           <p>{user.given_name}</p>
