@@ -21,12 +21,25 @@ export default async function PostPage({ params }: PageProps) {
   }
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
-      <Link
-        href={"/posts"}
-        className={buttonVariants({ variant: "secondary" })}
-      >
-        Back to posts
-      </Link>
+      <div className="flex justify-between items-center w-full">
+        <Link
+          href={"/posts"}
+          className={buttonVariants({ variant: "secondary" })}
+        >
+          Back to posts
+        </Link>
+        <div className="flex space-x-2">
+          <Link href={"/edit"} className={buttonVariants()}>
+            Edit
+          </Link>
+          <Link
+            href={"/delete"}
+            className={buttonVariants({ variant: "destructive" })}
+          >
+            Delete
+          </Link>
+        </div>
+      </div>
       <div className="mb-8 mt-6">
         <h1 className="text-3xl font-bold tracking-tight mb-4">{data.title}</h1>
         <div className="flex items-center space-x-4">
