@@ -7,13 +7,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export default async function PostPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const resolvedParams = await params; // Await the Promise
-  const { slug } = resolvedParams; // Now destructure the slug
+type Params = Promise<{ slug: string }>;
+
+export default async function PostPage({ params }: { params: Params }) {
+  const { slug } = await params;
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 

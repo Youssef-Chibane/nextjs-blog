@@ -14,9 +14,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { UpdatePost } from "@/app/actions";
 
-export default async function EditPost({params,}: {params: { slug: string };}) {
-  const resolvedParams = await params;  // Await the Promise
-  const { slug } = resolvedParams;      // Now destructure the slug
+type Params = Promise<{ slug: string }>;
+
+export default async function EditPost({ params }: { params: Params }) {
+  const { slug } = await params;
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
