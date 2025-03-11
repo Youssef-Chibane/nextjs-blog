@@ -34,7 +34,7 @@ export default async function EditPost({ params }: PageProps) {
   const isOwner = user?.id === data.authorId; // Check if the logged-in user is the post owner
 
   return (
-    <div>
+    <div className="py-8">
       <Card className="max-w-lg mx-auto">
         <CardHeader>
           <CardTitle>Create Post</CardTitle>

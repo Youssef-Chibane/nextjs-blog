@@ -13,7 +13,7 @@ import { Label } from "@radix-ui/react-label";
 
 export default function CreatePage() {
   return (
-    <div>
+    <div className="py-8">
       <Card className="max-w-lg mx-auto">
         <CardHeader>
           <CardTitle>Create Post</CardTitle>
