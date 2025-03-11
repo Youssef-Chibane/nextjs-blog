@@ -12,7 +12,8 @@ export default async function PostPage({
 }: {
   params: { slug: string };
 }) {
-  const { slug } = await params; // Extract id properly
+  const resolvedParams = await params; // Await the Promise
+  const { slug } = resolvedParams; // Now destructure the slug
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 

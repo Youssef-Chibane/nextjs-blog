@@ -11,11 +11,12 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@radix-ui/react-label";
+import { Label } from "@/components/ui/label";
 import { UpdatePost } from "@/app/actions";
 
 export default async function EditPost({params,}: {params: { slug: string };}) {
-  const { slug } = await params; // Destructure `id` from params
+  const resolvedParams = await params;  // Await the Promise
+  const { slug } = resolvedParams;      // Now destructure the slug
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
