@@ -56,3 +56,32 @@ export async function DeletePost(formData: FormData) {
   // Redirect after successful deletion
   return redirect("/dashboard");
 }
+
+export async function UpdatePost(formData: FormData) {
+  const postId = formData.get("postId") as string;
+  const title = formData.get("title") as string;
+  const content = formData.get("content") as string;
+  const imageUrl = formData.get("url") as string;
+
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  const post = await prisma.blogPost.findUnique({
+    where: { id: postId },
+  });
+
+  if (!post) {
+    throw new Error("Post not found");
+  }
+
+  if (post.authorId !== user.id) {
+    throw new Error("You are not authorized to update this post");
+  }
+
+  await prisma.blogPost.update({
+    where: { id: postId },
+    data: { title, content, imageUrl },
+  });
+
+  return redirect("/dashboard");
+}
