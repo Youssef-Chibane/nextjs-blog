@@ -7,13 +7,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export default async function PostPage({ params }: { params: { id: string } }) {
-  const { id } = await params; // Extract id properly
+export default async function PostPage({ params }: { params: { slug: string } }) {
+  const { slug } = await params; // Extract id properly
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
   const data = await prisma.blogPost.findUnique({
-    where: { id },
+    where: { slug },
   });
 
   if (!data) {
@@ -33,11 +33,11 @@ export default async function PostPage({ params }: { params: { id: string } }) {
         </Link>
         {isOwner && (
           <div className="flex space-x-2">
-            <Link href={`/posts/${id}/edit`} className={buttonVariants()}>
+            <Link href={`/posts/${slug}/edit`} className={buttonVariants()}>
               Edit
             </Link>
             <form action={DeletePost}>
-              <input type="hidden" name="postId" value={id} />
+              <input type="hidden" name="slug" value={slug} />
               <button
                 type="submit"
                 className={buttonVariants({ variant: "destructive" })}
