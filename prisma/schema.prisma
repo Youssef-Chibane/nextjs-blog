@@ -13,6 +13,7 @@ datasource db {
 model BlogPost {
   id          String @id @default(uuid())
   title       String
+  slug        String @unique
   content     String
   imageUrl    String
   authorId    String
