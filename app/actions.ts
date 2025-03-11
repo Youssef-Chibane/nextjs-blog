@@ -15,6 +15,10 @@ export async function CreatePost(formData: FormData) {
   const data = await prisma.blogPost.create({
     data: {
       title: formData.get("title") as string,
+      slug: (formData.get("title") as string)
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-"),
       content: formData.get("content") as string,
       imageUrl: formData.get("url") as string,
       authorId: user.id,
@@ -60,6 +64,7 @@ export async function DeletePost(formData: FormData) {
 export async function UpdatePost(formData: FormData) {
   const postId = formData.get("postId") as string;
   const title = formData.get("title") as string;
+  const slug = (formData.get("title") as string).toLowerCase().trim().replace(/\s+/g, "-");
   const content = formData.get("content") as string;
   const imageUrl = formData.get("url") as string;
 
@@ -80,7 +85,7 @@ export async function UpdatePost(formData: FormData) {
 
   await prisma.blogPost.update({
     where: { id: postId },
-    data: { title, content, imageUrl },
+    data: { title, content, imageUrl, slug },
   });
 
   return redirect("/dashboard");
