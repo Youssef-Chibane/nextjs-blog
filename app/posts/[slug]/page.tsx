@@ -7,7 +7,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export default async function PostPage({ params }: { params: { slug: string } }) {
+export default async function PostPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const { slug } = await params; // Extract id properly
   const { getUser } = getKindeServerSession();
   const user = await getUser();
@@ -40,7 +44,9 @@ export default async function PostPage({ params }: { params: { slug: string } })
               <input type="hidden" name="slug" value={slug} />
               <button
                 type="submit"
-                className={buttonVariants({ variant: "destructive" })}
+                className={`${buttonVariants({
+                  variant: "destructive",
+                })} cursor-pointer`}
               >
                 Delete
               </button>
