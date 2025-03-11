@@ -14,14 +14,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@radix-ui/react-label";
 import { UpdatePost } from "@/app/actions";
 
-export default async function EditPost({ params }: { params: { id: string } }) {
-  const { id } = await params; // Destructure `id` from params
+export default async function EditPost({params,}: {params: { slug: string };}) {
+  const { slug } = await params; // Destructure `id` from params
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
   const data = await prisma.blogPost.findUnique({
     where: {
-      id,
+      slug,
     },
   });
 
@@ -41,7 +41,7 @@ export default async function EditPost({ params }: { params: { id: string } }) {
         </CardHeader>
         <CardContent>
           <form className="flex flex-col gap-4" action={UpdatePost}>
-            <Input type="hidden" name="postId" value={id} />
+            <Input type="hidden" name="slug" value={slug} />
             <div className="flex flex-col gap-2">
               <Label>Title</Label>
               <Input
