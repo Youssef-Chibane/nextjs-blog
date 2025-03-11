@@ -7,43 +7,37 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-interface PageProps {
-  params: { id: string };
-}
-
-export default async function PostPage({ params }: PageProps) {
+export default async function PostPage({ params }: { params: { id: string } }) {
+  const { id } = await params; // Extract id properly
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
   const data = await prisma.blogPost.findUnique({
-    where: {
-      id: params.id,
-    },
+    where: { id },
   });
 
   if (!data) {
     return notFound();
   }
-  const isOwner = user?.id === data.authorId; // Check if the logged-in user is the post owner
+
+  const isOwner = user?.id === data.authorId;
+
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
       <div className="flex justify-between items-center w-full">
         <Link
-          href={"/posts"}
+          href="/posts"
           className={buttonVariants({ variant: "secondary" })}
         >
           Back to posts
         </Link>
         {isOwner && (
           <div className="flex space-x-2">
-            <Link
-              href={`/posts/${params.id}/edit`}
-              className={buttonVariants()}
-            >
+            <Link href={`/posts/${id}/edit`} className={buttonVariants()}>
               Edit
             </Link>
             <form action={DeletePost}>
-              <input type="hidden" name="postId" value={params.id} />
+              <input type="hidden" name="postId" value={id} />
               <button
                 type="submit"
                 className={buttonVariants({ variant: "destructive" })}
