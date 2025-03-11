@@ -2,37 +2,42 @@
 
 import { prisma } from "@/lib/prisma";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
+// Function to create a new blog post
 export async function CreatePost(formData: FormData) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
+  // Redirect to login if the user is not authenticated
   if (!user) {
     return redirect("/api/auth/login");
   }
 
+  // Create a new blog post in the database
   const data = await prisma.blogPost.create({
     data: {
       title: formData.get("title") as string,
       slug: (formData.get("title") as string)
         .toLowerCase()
         .trim()
-        .replace(/\s+/g, "-"),
+        .replace(/\s+/g, "-"), // Generate a slug from the title
       content: formData.get("content") as string,
       imageUrl: formData.get("url") as string,
-      authorId: user.id,
+      authorId: user.id, // Assign the post to the authenticated user
       authorImage: user.picture as string,
       authorName: user.given_name as string,
     },
   });
 
+  // Redirect to the dashboard after successful post creation
   return redirect("/dashboard");
 }
 
+// Function to delete a blog post
 export async function DeletePost(formData: FormData) {
-  // Get the post ID from the form data
-  const postId = formData.get("postId") as string;
+  // Get the post ID (slug) from the form data
+  const slug = formData.get("slug") as string;
 
   // Get the current user's session
   const { getUser } = getKindeServerSession();
@@ -40,9 +45,10 @@ export async function DeletePost(formData: FormData) {
 
   // Fetch the post to check if the user is the owner
   const post = await prisma.blogPost.findUnique({
-    where: { id: postId },
+    where: { slug },
   });
 
+  // If post is not found, throw an error
   if (!post) {
     throw new Error("Post not found");
   }
@@ -54,39 +60,50 @@ export async function DeletePost(formData: FormData) {
 
   // Proceed with deletion if the user is the author
   await prisma.blogPost.delete({
-    where: { id: postId },
+    where: { slug },
   });
 
-  // Redirect after successful deletion
+  // Redirect to the dashboard after successful deletion
   return redirect("/dashboard");
 }
 
+// Function to update an existing blog post
 export async function UpdatePost(formData: FormData) {
-  const postId = formData.get("postId") as string;
-  const title = formData.get("title") as string;
-  const slug = (formData.get("title") as string).toLowerCase().trim().replace(/\s+/g, "-");
-  const content = formData.get("content") as string;
-  const imageUrl = formData.get("url") as string;
-
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  const post = await prisma.blogPost.findUnique({
-    where: { id: postId },
+  // Redirect to login if the user is not authenticated
+  if (!user) {
+    return redirect("/api/auth/login");
+  }
+
+  // Get the current slug from the form data
+  const slug = formData.get("slug") as string;
+
+  // Fetch the existing post from the database
+  const existingPost = await prisma.blogPost.findUnique({
+    where: { slug },
   });
 
-  if (!post) {
-    throw new Error("Post not found");
+  // Check if the logged-in user is the owner of the post
+  if (existingPost?.authorId !== user.id) {
+    throw new Error("Forbidden: You are not the owner of this post.");
   }
 
-  if (post.authorId !== user.id) {
-    throw new Error("You are not authorized to update this post");
-  }
-
+  // Update the post if the user is the owner
   await prisma.blogPost.update({
-    where: { id: postId },
-    data: { title, content, imageUrl, slug },
+    where: { slug },
+    data: {
+      title: formData.get("title") as string,
+      slug: (formData.get("title") as string)
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-"), // Regenerate the slug based on the new title
+      content: formData.get("content") as string,
+      imageUrl: formData.get("url") as string,
+    },
   });
 
+  // Redirect to the dashboard after successful update
   return redirect("/dashboard");
 }
