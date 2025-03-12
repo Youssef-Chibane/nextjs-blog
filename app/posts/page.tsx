@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import loading from "../loading";
 import { Suspense } from "react";
 
+export const revalidate = 300;
+
 export default async function PostsPage() {
   return (
     <div>

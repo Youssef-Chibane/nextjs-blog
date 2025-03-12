@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { Suspense } from "react";
 import loading from "./loading";
 
+export const revalidate = 300;
+
 export default function Home() {
   return (
     <div className="py-6">

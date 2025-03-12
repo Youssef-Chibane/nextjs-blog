@@ -3,6 +3,8 @@
 import { prisma } from "@/lib/prisma";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { notFound, redirect } from "next/navigation";
+import { revalidate } from "./page";
+import { revalidatePath } from "next/cache";
 
 // Function to create a new blog post
 export async function CreatePost(formData: FormData) {
@@ -30,6 +32,8 @@ export async function CreatePost(formData: FormData) {
     },
   });
 
+  revalidatePath("/")
+  revalidatePath("/posts")
   // Redirect to the dashboard after successful post creation
   return redirect("/dashboard");
 }
