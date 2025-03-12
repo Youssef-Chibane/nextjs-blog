@@ -28,6 +28,10 @@ async function BlogPosts() {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
+  if (!user) {
+    return <div>You must be logged in to view this page.</div>;
+  }
+
   const data = await prisma.blogPost.findMany({
     where: {
       authorId: user.id,
