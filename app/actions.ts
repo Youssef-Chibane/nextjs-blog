@@ -34,6 +34,7 @@ export async function CreatePost(formData: FormData) {
 
   revalidatePath("/")
   revalidatePath("/posts")
+
   // Redirect to the dashboard after successful post creation
   return redirect("/dashboard");
 }
@@ -66,6 +67,9 @@ export async function DeletePost(formData: FormData) {
   await prisma.blogPost.delete({
     where: { slug },
   });
+
+  revalidatePath("/")
+  revalidatePath("/posts")
 
   // Redirect to the dashboard after successful deletion
   return redirect("/dashboard");
@@ -108,6 +112,9 @@ export async function UpdatePost(formData: FormData) {
     },
   });
 
+  revalidatePath("/")
+  revalidatePath("/posts")
+  
   // Redirect to the dashboard after successful update
   return redirect("/dashboard");
 }
