@@ -4,9 +4,8 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: "accuratesurgical.com",
         protocol: "https",
-        port: "",
+        hostname: "**", // Allow all hosts (not recommended for security)
       },
       {
         hostname: "lh3.googleusercontent.com",
