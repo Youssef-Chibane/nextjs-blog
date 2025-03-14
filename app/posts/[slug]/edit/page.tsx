@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import SubmitButton from "@/components/general/SubmitButton";
 import {
   Card,
@@ -32,6 +32,9 @@ export default async function EditPost({ params }: { params: Params }) {
   }
   const isOwner = user?.id === data.authorId; // Check if the logged-in user is the post owner
 
+  if (!isOwner) {
+    return notFound();
+  }
   return (
     <div className="py-8">
       <Card className="max-w-lg mx-auto">
