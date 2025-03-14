@@ -23,7 +23,9 @@ export async function CreatePost(formData: FormData) {
       slug: (formData.get("title") as string)
         .toLowerCase()
         .trim()
-        .replace(/\s+/g, "-"), // Generate a slug from the title
+        .replace(/[^\w\s-]/g, "") // Remove special characters except spaces and hyphens
+        .replace(/\s+/g, "-") // Replace spaces with hyphens
+        .replace(/-+/g, "-"), // Remove duplicate hyphens
       content: formData.get("content") as string,
       imageUrl: formData.get("url") as string,
       authorId: user.id, // Assign the post to the authenticated user
@@ -32,8 +34,8 @@ export async function CreatePost(formData: FormData) {
     },
   });
 
-  revalidatePath("/")
-  revalidatePath("/posts")
+  revalidatePath("/");
+  revalidatePath("/posts");
 
   // Redirect to the dashboard after successful post creation
   return redirect("/dashboard");
@@ -68,8 +70,8 @@ export async function DeletePost(formData: FormData) {
     where: { slug },
   });
 
-  revalidatePath("/")
-  revalidatePath("/posts")
+  revalidatePath("/");
+  revalidatePath("/posts");
 
   // Redirect to the dashboard after successful deletion
   return redirect("/dashboard");
@@ -106,15 +108,17 @@ export async function UpdatePost(formData: FormData) {
       slug: (formData.get("title") as string)
         .toLowerCase()
         .trim()
-        .replace(/\s+/g, "-"), // Regenerate the slug based on the new title
+        .replace(/[^\w\s-]/g, "") // Remove special characters except spaces and hyphens
+        .replace(/\s+/g, "-") // Replace spaces with hyphens
+        .replace(/-+/g, "-"), // Remove duplicate hyphens
       content: formData.get("content") as string,
       imageUrl: formData.get("url") as string,
     },
   });
 
-  revalidatePath("/")
-  revalidatePath("/posts")
-  
+  revalidatePath("/");
+  revalidatePath("/posts");
+
   // Redirect to the dashboard after successful update
   return redirect("/dashboard");
 }
